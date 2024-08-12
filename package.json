@@ -1,0 +1,21 @@
+{
+  "name": "tintedlens",
+  "version": "1.0.0",
+  "description": "Lens protocol poster",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "StarLith",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.3",
+    "dotenv": "^16.4.5",
+    "path": "^0.12.7",
+    "playwright": "^1.45.2",
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2",
+    "sqlite3": "^5.1.7"
+  }
+}
