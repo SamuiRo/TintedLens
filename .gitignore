@@ -1,5 +1,6 @@
 *.sqlite
 /src/module/session/*
+/src/module/extensions/MetaMask
 
 # Logs
 logs
