@@ -1,6 +1,6 @@
 {
   "name": "tintedlens",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Lens protocol poster",
   "main": "index.js",
   "scripts": {

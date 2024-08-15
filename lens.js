@@ -5,7 +5,7 @@ const Monitor = require("./src/module/forward.module")
 async function main() {
     try {
         await _connectDB()
-        // await Twitter.launch()
+        await Twitter.launch()
         await Monitor.startMonitoring()
     } catch (error) {
         console.log(error)

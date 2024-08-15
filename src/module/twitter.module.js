@@ -1,68 +1,32 @@
-const { chromium } = require('playwright');
-const fs = require('fs');
-const path = require('path');
-
-const { post_to_hey } = require("./hey.module")
-
-const { HEADLESS, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, TWITTER_SOURCE_URL, TWITTER_SOURCE_TAG } = require("../../app.config")
+const { TWITTER_SOURCE_URL, TWITTER_SOURCE_TAG } = require("../../app.config")
 const { TWITTER_USER_FEED, TWITTER_USER_POSTS_CONTAINER, } = require("../config/twitter.selector.config");
 const Post = require('../database/models/twitter_post');
-const { sleep } = require('../utils/utils');
+const { sleep } = require("../utils/utils");
+const { init } = require("./browser.module")
 
 async function launch(params) {
     try {
         const context = await init()
 
         const page = await context.newPage();
-        await page.bringToFront()
 
-        await page.goto(TWITTER_SOURCE_URL)
-        await page.waitForLoadState('networkidle')
+        while (true) {
+            await page.bringToFront()
 
-        const user_feed = await get_user_feed(page)
+            await page.goto(TWITTER_SOURCE_URL)
+            await page.waitForLoadState('networkidle')
 
-        console.log(user_feed)
+            const user_feed = await get_user_feed(page)
 
-        await add_new_posts(user_feed.posts, TWITTER_SOURCE_TAG)
-        // await post_to_hey(page, user_feed.posts[0])
+            await add_new_posts(user_feed.posts, TWITTER_SOURCE_TAG)
 
-        // await page.goto("https://hey.xyz/u/starlith")
-        // await page.waitForLoadState('networkidle')
-        // await sleep(10000000)
-        await page.close()
-        await context.close()
-    } catch (error) {
-        console.log(error)
-    }
-}
+            await sleep(5000)
 
-async function init() {
-    try {
-        const sessionFolderPath = path.join(__dirname, 'session');
+            await page.close()
+            await context.close()
 
-        // Створюємо папку для сесії, якщо вона не існує
-        if (!fs.existsSync(sessionFolderPath)) fs.mkdirSync(sessionFolderPath);
-
-
-        const pathToExtension = require('path').join(__dirname, "extensions", 'MetaMask');
-        console.log(pathToExtension)
-        const context = await chromium.launchPersistentContext(sessionFolderPath, {
-            headless: HEADLESS,
-            args: [
-                '--disable-blink-features=AutomationControlled',
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-infobars',
-                '--disable-extensions',
-                '--disable-dev-shm-usage',
-                `--disable-extensions-except=${pathToExtension}`,
-                `--load-extension=${pathToExtension}`
-            ],
-            userAgent: USERAGENT,
-            viewport: { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
-        });
-
-        return context
+            await sleep(3600000)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -170,7 +134,6 @@ async function get_post_attributs(post) {
     try {
         const footer = await post.$eval(`div[data-testid="User-Name"][class][id]`, el => el.innerText)
 
-        // const id = await footer.getAttribute('id')
         const id = footer
 
         return id

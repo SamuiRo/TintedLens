@@ -1,12 +1,8 @@
-const { chromium } = require('playwright');
-const fs = require('fs');
-const path = require('path');
-
 const { HEY_WHATS_NEW_BUTTON, HEY_MODAL_CONTAINER, HEY_MODAL_WHATS_NEW_BUTTON, HEY_MODAL_FOOTER__OPEN_UPLOAD_IMAGE_MENU, HEY_MODAL_FOOTER_FILE_INPUT, HEY_MODAL_FOOTER_UPLOAD_IMAGE_MENU } = require("../config/hey.selector.config")
-const { HEADLESS, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, TWITTER_SOURCE_URL, TWITTER_SOURCE_TAG } = require("../../app.config")
-const { HEY_ACCOUNT_URL } = require("../../app.config");
+const { HEY_ACCOUNT_URL } = require("../../app.config")
 const { get_image_buffer, sleep } = require('../utils/utils');
 const Post = require("../database/models/twitter_post");
+const { init } = require("./browser.module")
 
 async function post_to_hey(post) {
     try {
@@ -36,9 +32,12 @@ async function post_to_hey(post) {
             state: 'detached',
             timeout: 160000 // встановлює тайм-аут у 10 секунд, змініть за потреби
         });
-       
+
         const post_button = await modal_container.$(`div > div.block.items-center.px-5.py-3.sm\\:flex > div.ml-auto.mt-2.sm\\:mt-0 > button`)
         await post_button.click()
+
+        await page.waitForLoadState('networkidle')
+        await sleep(10000)
         // `div > div.block.items-center.px-5.py-3.sm\:flex > div.ml-auto.mt-2.sm\:mt-0 > button`
         await Post.update({
             hey_status: "posted",
@@ -51,38 +50,6 @@ async function post_to_hey(post) {
 
         await page.close()
         await context.close()
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-async function init() {
-    try {
-        const sessionFolderPath = path.join(__dirname, 'session');
-
-        // Створюємо папку для сесії, якщо вона не існує
-        if (!fs.existsSync(sessionFolderPath)) fs.mkdirSync(sessionFolderPath);
-
-
-        const pathToExtension = require('path').join(__dirname, "extensions", 'MetaMask');
-        console.log(pathToExtension)
-        const context = await chromium.launchPersistentContext(sessionFolderPath, {
-            headless: HEADLESS,
-            args: [
-                '--disable-blink-features=AutomationControlled',
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-infobars',
-                '--disable-extensions',
-                '--disable-dev-shm-usage',
-                `--disable - extensions - except=${pathToExtension} `,
-                `--load - extension=${pathToExtension} `
-            ],
-            userAgent: USERAGENT,
-            viewport: { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
-        });
-
-        return context
     } catch (error) {
         console.log(error)
     }
@@ -101,8 +68,6 @@ async function add_images_to_post(page, images) {
 
         for (let image of images) {
             const image_buffer = await get_image_buffer(image.url)
-
-
 
             await upload_file(input, image_buffer)
             sleep(1000000)

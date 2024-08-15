@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 const Twitter = require("./twitter.module")
 const Post = require("../database/models/twitter_post")
 const { post_to_hey } = require("../module/hey.module")
@@ -11,13 +9,11 @@ async function monitorProfile() {
     try {
         console.log("Monitor status", isRunning)
         while (isRunning) {
-            // console.log("Monitor status", isRunning)
             console.log('Моніторинг сторінки...');
-            const result = await Twitter.launch(null)
-
-            // const posts = await Post.findAll({ where })
 
             const ready_to_post = await isLastPostOlderThan3Hours()
+            // const ready_to_post = true
+            console.log("ready_to_post", ready_to_post)
             if (ready_to_post) {
                 const random_post = await getRandomPostWithNullFields()
                 if (random_post) await post_to_hey(random_post)
@@ -27,10 +23,10 @@ async function monitorProfile() {
         }
     } catch (error) {
         console.error('Виникла помилка:', error.message);
-        if (isRunning) {
-            console.log('Перезапуск через помилку...');
-            restartMonitoring();
-        }
+        // if (isRunning) {
+        //     console.log('Перезапуск через помилку...');
+        //     restartMonitoring();
+        // }
     }
 }
 
@@ -48,7 +44,6 @@ function startMonitoring() {
 
 async function getRandomPostWithNullFields() {
     try {
-        // Отримуємо кількість постів, що відповідають умовам
         const count = await Post.count({
             where: {
                 publishing_date: null,
@@ -61,10 +56,8 @@ async function getRandomPostWithNullFields() {
             return null;
         }
 
-        // Генеруємо випадковий індекс
         const randomIndex = Math.floor(Math.random() * count);
 
-        // Отримуємо випадковий пост
         const randomPost = await Post.findOne({
             where: {
                 publishing_date: null,
@@ -95,7 +88,6 @@ function restartMonitoring() {
 
 async function isLastPostOlderThan3Hours() {
     try {
-        // Знаходимо останній пост на основі поля publishing_date
         const lastPost = await Post.findOne({
             order: [['publishing_date', 'DESC']]
         });
@@ -107,14 +99,29 @@ async function isLastPostOlderThan3Hours() {
 
         const lastPublishingDate = lastPost.publishing_date;
         const currentTime = new Date();
-        const timeDifference = (currentTime - lastPublishingDate) / (1000 * 60 * 60); // Різниця в годинах
 
-        console.log(`Останній пост був опублікований ${lastPublishingDate}.`);
-        return timeDifference > 3;
+        const timeDifference = dateDifference(lastPublishingDate, currentTime);
+
+        console.log(timeDifference)
+        return timeDifference.hours >= 3;
     } catch (error) {
         console.error('Помилка при перевірці часу останньої публікації:', error.message);
         return false;
     }
+}
+
+function dateDifference(oldDate, currentDate) {
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    const _MS_PER_HOUR = 1000 * 60 * 60;
+    const _MS_PER_MINUTE = 1000 * 60;
+
+    const diff = new Date(currentDate) - new Date(oldDate);
+
+    return {
+        minutes: Math.floor(diff / _MS_PER_MINUTE),
+        hours: Math.floor(diff / _MS_PER_HOUR),
+        days: Math.floor(diff / _MS_PER_DAY)
+    };
 }
 
 module.exports = {
