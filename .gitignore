@@ -1,6 +1,9 @@
 *.sqlite
 /src/module/session/*
 /src/module/extensions/MetaMask
+/src/module/Hey
+/src/module/Twitter
+/src/module/session
 
 # Logs
 logs

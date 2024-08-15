@@ -4,9 +4,9 @@ const Post = require('../database/models/twitter_post');
 const { sleep } = require("../utils/utils");
 const { init } = require("./browser.module")
 
-async function launch(params) {
+async function launch() {
     try {
-        const context = await init()
+        const context = await init("Twitter")
 
         const page = await context.newPage();
 

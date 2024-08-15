@@ -2,18 +2,17 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const { HEADLESS, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, TWITTER_SOURCE_URL, TWITTER_SOURCE_TAG } = require("../../app.config")
-const { TWITTER_USER_FEED, TWITTER_USER_POSTS_CONTAINER, } = require("../config/twitter.selector.config");
-const { sleep } = require('../utils/utils');
+const { HEADLESS, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, } = require("../../app.config")
 
-async function init() {
+
+async function init(profile) {
     try {
-        const sessionFolderPath = path.join(__dirname, 'session');
+        const sessionFolderPath = path.join(__dirname, profile, 'session');
 
-        if (!fs.existsSync(sessionFolderPath)) fs.mkdirSync(sessionFolderPath);
+        if (!fs.existsSync(sessionFolderPath)) fs.mkdirSync(sessionFolderPath, { recursive: true });
 
         const pathToExtension = require('path').join(__dirname, "extensions", 'MetaMask');
-        
+
         const context = await chromium.launchPersistentContext(sessionFolderPath, {
             headless: HEADLESS,
             args: [
@@ -30,6 +29,7 @@ async function init() {
             viewport: { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
         });
 
+        console.log("Created context for", profile)
         return context
     } catch (error) {
         console.log(error)

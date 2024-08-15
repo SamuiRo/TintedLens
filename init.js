@@ -4,7 +4,11 @@ const { HEY_ACCOUNT_URL } = require("./app.config")
 
 async function browser_init() {
     try {
-        const context = await init()
+        const twitter = await init("Twitter")
+
+        await twitter.close()
+
+        const context = await init("Hey")
 
         const page = await context.newPage();
 

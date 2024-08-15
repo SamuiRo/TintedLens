@@ -11,8 +11,8 @@ async function monitorProfile() {
         while (isRunning) {
             console.log('Моніторинг сторінки...');
 
-            const ready_to_post = await isLastPostOlderThan3Hours()
-            // const ready_to_post = true
+            // const ready_to_post = await isLastPostOlderThan3Hours()
+            const ready_to_post = true
             console.log("ready_to_post", ready_to_post)
             if (ready_to_post) {
                 const random_post = await getRandomPostWithNullFields()

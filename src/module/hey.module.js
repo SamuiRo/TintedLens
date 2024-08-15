@@ -6,7 +6,7 @@ const { init } = require("./browser.module")
 
 async function post_to_hey(post) {
     try {
-        const context = await init()
+        const context = await init("Hey")
 
         const page = await context.newPage();
 
@@ -47,6 +47,8 @@ async function post_to_hey(post) {
                 id: post.id
             }
         });
+
+        console.log("Posted", post)
 
         await page.close()
         await context.close()
