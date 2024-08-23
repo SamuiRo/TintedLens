@@ -5,7 +5,11 @@ module.exports = {
     VIEWPORT_HEIGHT: 880,
     HEADLESS: true,
     USERAGENT: process.env.USERAGENT,
-    TWITTER_SOURCE_URL: "https://x.com/Haltootoo",
+    TWITTER_SOURCE: [
+        {
+            url: "https://x.com/Haltootoo",
+            tag: "@Haltootoo"
+        },
+    ],
     HEY_ACCOUNT_URL: "https://hey.xyz/u/starlith",
-    TWITTER_SOURCE_TAG: "@Haltootoo",
 }

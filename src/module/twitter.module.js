@@ -1,4 +1,4 @@
-const { TWITTER_SOURCE_URL, TWITTER_SOURCE_TAG } = require("../../app.config")
+const { TWITTER_SOURCE } = require("../../app.config")
 const { TWITTER_USER_FEED, TWITTER_USER_POSTS_CONTAINER, } = require("../config/twitter.selector.config");
 const Post = require('../database/models/twitter_post');
 const { sleep } = require("../utils/utils");
@@ -6,27 +6,37 @@ const { init } = require("./browser.module")
 
 async function launch() {
     try {
-        const context = await init("Twitter")
-
-        const page = await context.newPage();
-
         while (true) {
-            await page.bringToFront()
+            const context = await init("Twitter")
 
-            await page.goto(TWITTER_SOURCE_URL)
-            await page.waitForLoadState('networkidle')
+            const page = await context.newPage();
 
-            const user_feed = await get_user_feed(page)
-
-            await add_new_posts(user_feed.posts, TWITTER_SOURCE_TAG)
-
-            await sleep(5000)
+            for (let profile of TWITTER_SOURCE) {
+                await load_page(page, profile)
+            }
 
             await page.close()
             await context.close()
 
             await sleep(3600000)
         }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function load_page(page, profile) {
+    try {
+        await page.bringToFront()
+
+        await page.goto(profile.url)
+        await page.waitForLoadState('networkidle')
+
+        const user_feed = await get_user_feed(page)
+
+        await add_new_posts(user_feed.posts, profile.tag)
+
+        await sleep(5000)
     } catch (error) {
         console.log(error)
     }
