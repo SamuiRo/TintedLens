@@ -1,6 +1,7 @@
 const Twitter = require("./twitter.module")
 const Post = require("../database/models/twitter_post")
 const { post_to_hey } = require("../module/hey.module")
+const { post_to_towns } = require("../module/towns.module")
 
 let isRunning = false;
 let isRestarting = false;
@@ -17,9 +18,11 @@ async function monitorProfile() {
             if (ready_to_post) {
                 const random_post = await getRandomPostWithNullFields()
                 if (random_post) await post_to_hey(random_post)
+                if (random_post) await post_to_towns(random_post)
             }
 
-            await new Promise(resolve => setTimeout(resolve, 100000));
+            // await new Promise(resolve => setTimeout(resolve, 100000));
+            await new Promise(resolve => setTimeout(resolve, 100000000));
         }
     } catch (error) {
         console.error('Виникла помилка:', error.message);

@@ -72,7 +72,7 @@ async function add_images_to_post(page, images) {
             const image_buffer = await get_image_buffer(image.url)
 
             await upload_file(input, image_buffer)
-            sleep(1000000)
+            
         }
     } catch (error) {
         console.log(error)

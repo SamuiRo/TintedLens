@@ -15,7 +15,7 @@ async function main() {
 async function _connectDB() {
     try {
         await sequelize.authenticate()
-        await sequelize.sync()
+        await sequelize.sync({ alter: true })
 
         console.log("Database Connected")
     } catch (error) {

@@ -12,4 +12,5 @@ module.exports = {
         },
     ],
     HEY_ACCOUNT_URL: "https://hey.xyz/u/starlith",
+    TOWNS_ACCOUNT_URL: "",
 }
