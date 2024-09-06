@@ -1,14 +1,15 @@
 const Twitter = require("./twitter.module")
 const Post = require("../database/models/twitter_post")
 const { post_to_hey } = require("../module/hey.module")
-const { post_to_towns } = require("../module/towns.module")
+const { post_to_towns } = require("../module/towns.module");
+const { sleep } = require("../utils/utils");
 
 let isRunning = false;
 let isRestarting = false;
 
 async function monitorProfile() {
     try {
-        console.log("Monitor status", isRunning)
+        // console.log("Monitor status", isRunning)
         while (isRunning) {
             console.log('Моніторинг сторінки...');
 
@@ -19,10 +20,11 @@ async function monitorProfile() {
                 const random_post = await getRandomPostWithNullFields()
                 if (random_post) await post_to_hey(random_post)
                 if (random_post) await post_to_towns(random_post)
+                // await sleep(1000000000)
             }
 
             // await new Promise(resolve => setTimeout(resolve, 100000));
-            await new Promise(resolve => setTimeout(resolve, 100000000));
+            await new Promise(resolve => setTimeout(resolve, 1000000));
         }
     } catch (error) {
         console.error('Виникла помилка:', error.message);

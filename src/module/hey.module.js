@@ -18,8 +18,9 @@ async function post_to_hey(post) {
         await page.waitForSelector(HEY_WHATS_NEW_BUTTON)
         await page.click(HEY_WHATS_NEW_BUTTON)
 
-        await page.waitForSelector(HEY_MODAL_CONTAINER)
-        const modal_container = await page.$(HEY_MODAL_CONTAINER)
+        // await page.waitForSelector(HEY_MODAL_CONTAINER)
+        // const modal_container = await page.$(HEY_MODAL_CONTAINER)
+        const modal_container = page
 
         const textarea = await modal_container.$(HEY_MODAL_WHATS_NEW_BUTTON)
         await textarea.click()

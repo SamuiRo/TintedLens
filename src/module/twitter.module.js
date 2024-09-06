@@ -15,6 +15,8 @@ async function launch() {
                 await load_page(page, profile)
             }
 
+            console.log("Posts loaded to db")
+
             await page.close()
             await context.close()
 
@@ -63,7 +65,7 @@ async function add_new_posts(posts, profile_tag) {
             if (created) {
                 console.log(`Пост з ID ${newPost.id} успішно створено.`);
             } else {
-                console.log(`Пост вже існує в базі даних.`);
+                // console.log(`Пост вже існує в базі даних.`);
             }
         }
     } catch (error) {
@@ -89,7 +91,7 @@ async function get_user_feed(page) {
             user_post.content = await get_post_content(post)
             user_post.images = await get_post_attachments(post)
 
-            console.log(user_post)
+            // console.log(user_post)
             result.posts.push(user_post)
         }
 
