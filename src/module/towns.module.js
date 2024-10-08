@@ -3,6 +3,7 @@ const { init } = require("./browser.module")
 const { get_image_buffer, sleep } = require("../utils/utils");
 const { TOWNS_POST_TEXTAREA, TOWNS_POST_MEDIA_INPUT, TOWNS_SEND_POST_BUTTON } = require("../config/towns.selector.config");
 const { TOWNS_ACCOUNT_URL } = require("../../app.config")
+const { send_message_to_telegram } = require("./notification.module")
 
 async function post_to_towns(post) {
     try {
@@ -29,12 +30,14 @@ async function post_to_towns(post) {
         await sleep(35000)
 
         console.log("Towns posted")
+        await send_message_to_telegram("Posted to Town " + post.profile)
 
         await page.close()
         await context.close()
 
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error while posting to Towns")
     }
 }
 
@@ -56,6 +59,7 @@ async function add_images_to_post(page, images) {
 
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error while adding images to Towns post")
     }
 }
 

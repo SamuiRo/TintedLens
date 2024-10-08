@@ -5,6 +5,8 @@ module.exports = {
     VIEWPORT_HEIGHT: 880,
     HEADLESS: true,
     USERAGENT: process.env.USERAGENT,
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHANNEL_ID: process.env.TELEGRAM_CHANNEL_ID,
     TWITTER_SOURCE: [
         {
             url: "https://x.com/Haltootoo",

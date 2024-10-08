@@ -23,8 +23,10 @@ const Post = sequelize.define("Post", {
         allowNull: true,
         defaultValue: []
     },
-    hey_status: {
-        type: DataTypes.STRING,
+    details: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: {}
     },
     publishing_date: {
         type: DataTypes.DATE,

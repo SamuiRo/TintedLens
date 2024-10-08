@@ -1,4 +1,4 @@
-const Twitter = require("./twitter.module")
+
 const Post = require("../database/models/twitter_post")
 const { post_to_hey } = require("../module/hey.module")
 const { post_to_towns } = require("../module/towns.module");
@@ -11,7 +11,7 @@ async function monitorProfile() {
     try {
         // console.log("Monitor status", isRunning)
         while (isRunning) {
-            console.log('Моніторинг сторінки...');
+
 
             const ready_to_post = await isLastPostOlderThan3Hours()
             // const ready_to_post = true

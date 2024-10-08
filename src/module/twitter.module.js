@@ -3,6 +3,7 @@ const { TWITTER_USER_FEED, TWITTER_USER_POSTS_CONTAINER, } = require("../config/
 const Post = require('../database/models/twitter_post');
 const { sleep } = require("../utils/utils");
 const { init } = require("./browser.module")
+const { send_message_to_telegram } = require("./notification.module")
 
 async function launch() {
     try {
@@ -24,6 +25,7 @@ async function launch() {
         }
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error while parsing Twitter")
     }
 }
 
@@ -41,6 +43,7 @@ async function load_page(page, profile) {
         await sleep(5000)
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error while load twitter page ")
     }
 }
 
@@ -63,7 +66,8 @@ async function add_new_posts(posts, profile_tag) {
             });
 
             if (created) {
-                console.log(`Пост з ID ${newPost.id} успішно створено.`);
+                console.log(`POST ID ${newPost.id} Created`);
+                await send_message_to_telegram(`Post ID: ${newPost.id} created`)
             } else {
                 // console.log(`Пост вже існує в базі даних.`);
             }

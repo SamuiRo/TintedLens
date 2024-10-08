@@ -1,12 +1,14 @@
 const Twitter = require("./src/module/twitter.module")
 const sequelize = require("./src/database/sqlite_db")
 const Monitor = require("./src/module/forward.module")
+const Poster = require("./src/module/poster.module")
 
 async function main() {
     try {
         await _connectDB()
         Twitter.launch()
-        await Monitor.startMonitoring()
+        Poster.launch()
+
     } catch (error) {
         console.log(error)
     }

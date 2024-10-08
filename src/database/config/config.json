@@ -1,0 +1,21 @@
+{
+  "development": {
+    "database": "pot_test",
+    "dialect": "sqlite",
+    "modelPaths": ["src/database/models"],
+    "storage": "./pot.sqlite"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "database": "pot",
+    "dialect": "sqlite",
+    "modelPaths": ["src/database/models"],
+    "storage": "./pot.sqlite"
+  }
+}

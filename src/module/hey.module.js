@@ -3,6 +3,7 @@ const { HEY_ACCOUNT_URL } = require("../../app.config")
 const { get_image_buffer, sleep } = require('../utils/utils');
 const Post = require("../database/models/twitter_post");
 const { init } = require("./browser.module")
+const { send_message_to_telegram } = require("./notification.module")
 
 async function post_to_hey(post) {
     try {
@@ -50,11 +51,13 @@ async function post_to_hey(post) {
         });
 
         console.log("Posted", post)
+        await send_message_to_telegram("Posted: " + post.profile)
 
         await page.close()
         await context.close()
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error while posting to HEY")
     }
 }
 
@@ -73,10 +76,11 @@ async function add_images_to_post(page, images) {
             const image_buffer = await get_image_buffer(image.url)
 
             await upload_file(input, image_buffer)
-            
+
         }
     } catch (error) {
         console.log(error)
+        await send_message_to_telegram("Error: Adding image to HEY post")
     }
 }
 

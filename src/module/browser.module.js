@@ -2,10 +2,10 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const { HEADLESS, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, } = require("../../app.config")
+const { VIEWPORT_WIDTH, VIEWPORT_HEIGHT, USERAGENT, } = require("../../app.config")
 
 
-async function init(profile) {
+async function init(profile, headless = true) {
     try {
         const sessionFolderPath = path.join(__dirname, profile, 'session');
 
@@ -14,7 +14,7 @@ async function init(profile) {
         const pathToExtension = require('path').join(__dirname, "extensions", 'MetaMask');
 
         const context = await chromium.launchPersistentContext(sessionFolderPath, {
-            headless: HEADLESS,
+            headless: headless,
             args: [
                 '--disable-blink-features=AutomationControlled',
                 '--no-sandbox',
