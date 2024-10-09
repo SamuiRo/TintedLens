@@ -13,8 +13,8 @@ async function launch() {
 
             if (isPostingTime) {
                 const random_post = await get_random_post()
-                if (random_post) await post_to_hey(random_post)
-                if (random_post) await post_to_towns(random_post)
+                if (!random_post.details.hey_posted_date) await post_to_hey(random_post)
+                if (!random_post.details.town_posted_date) await post_to_towns(random_post)
             }
             console.log("isPostingTme", isPostingTme)
             await sleep(1000000)

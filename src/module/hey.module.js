@@ -41,8 +41,12 @@ async function post_to_hey(post) {
         await page.waitForLoadState('networkidle')
         await sleep(10000)
         // `div > div.block.items-center.px-5.py-3.sm\:flex > div.ml-auto.mt-2.sm\:mt-0 > button`
+        let details = {
+            ...post.details,
+            hey_posted_date: new Date(),
+        }
         await Post.update({
-            hey_status: "posted",
+            details,
             publishing_date: new Date()
         }, {
             where: {

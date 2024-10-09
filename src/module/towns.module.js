@@ -4,6 +4,7 @@ const { get_image_buffer, sleep } = require("../utils/utils");
 const { TOWNS_POST_TEXTAREA, TOWNS_POST_MEDIA_INPUT, TOWNS_SEND_POST_BUTTON } = require("../config/towns.selector.config");
 const { TOWNS_ACCOUNT_URL } = require("../../app.config")
 const { send_message_to_telegram } = require("./notification.module")
+const Post = require("../database/models/twitter_post")
 
 async function post_to_towns(post) {
     try {
@@ -26,6 +27,19 @@ async function post_to_towns(post) {
         await page.click(TOWNS_SEND_POST_BUTTON)
         await sleep(2000)
         console.log("loaded")
+
+        let details = {
+            ...post.details,
+            town_posted_date: new Date(),
+        }
+        await Post.update({
+            details,
+            publishing_date: new Date()
+        }, {
+            where: {
+                id: post.id
+            }
+        });
 
         await sleep(35000)
 

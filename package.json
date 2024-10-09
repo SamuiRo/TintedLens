@@ -1,7 +1,7 @@
 {
   "name": "tintedlens",
-  "version": "1.4.0",
-  "description": "Lens protocol poster",
+  "version": "1.4.1",
+  "description": "SocialFi protocols poster. Lens, Towns",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

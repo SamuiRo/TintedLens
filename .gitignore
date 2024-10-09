@@ -5,7 +5,8 @@
 /src/module/Twitter
 /src/module/session
 /backups
-
+/twitter_source.json
+/town
 
 # Logs
 logs
