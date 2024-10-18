@@ -5,25 +5,28 @@ const path = require('path');
 
 const sequelize = require("./src/database/sqlite_db")
 
-const { HEY_ACCOUNT_URL } = require("./app.config")
-
 async function main_init() {
     const twitter_source_path = path.join(process.cwd(), "twitter_source.json")
     try {
-        // await runMigrations()
         await checkAndCreateFile(twitter_source_path)
 
         await _connectDB()
 
-        const twitter = await init("Twitter")
+        const twitter = await init("Twitter", false)
 
-        await twitter.close()
+        const twitter_page = await twitter.newPage()
+
+        await twitter_page.goto("https://x.com/")
 
         const context = await init("Hey", false)
 
         const page = await context.newPage();
 
-        await page.goto(HEY_ACCOUNT_URL)
+        await page.goto("https://hey.xyz/")
+
+        const towns = await context.newPage()
+
+        await towns.goto("https://app.towns.com/t/1029bb70177eecdb30ab900e0b02961cbbaf4c2a170000000000000000000000/channels/2029bb70177eecdb30ab900e0b02961cbbaf4c2a17a6220aedf44aeb1a584934/")
     } catch (error) {
         console.log(error)
     }

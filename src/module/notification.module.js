@@ -27,10 +27,18 @@ async function send_message_to_telegram(message) {
         }
     } catch (error) {
         console.error(`Telegram API Error: ${error.message}`);
-        throw error;
+    }
+}
+
+async function send_notification(message) {
+    try {
+        await send_message_to_telegram(message)
+    } catch (error) {
+        console.log(error)
     }
 }
 
 module.exports = {
-    send_message_to_telegram
+    send_message_to_telegram,
+    send_notification
 }

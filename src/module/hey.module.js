@@ -14,7 +14,9 @@ async function post_to_hey(post) {
         await page.bringToFront()
 
         await page.goto(HEY_ACCOUNT_URL)
-        await page.waitForLoadState('networkidle')
+        // await page.waitForLoadState('networkidle')
+
+        await sleep(5000)
 
         await page.waitForSelector(HEY_WHATS_NEW_BUTTON)
         await page.click(HEY_WHATS_NEW_BUTTON)
@@ -40,7 +42,7 @@ async function post_to_hey(post) {
 
         await page.waitForLoadState('networkidle')
         await sleep(10000)
-        // `div > div.block.items-center.px-5.py-3.sm\:flex > div.ml-auto.mt-2.sm\:mt-0 > button`
+        
         let details = {
             ...post.details,
             hey_posted_date: new Date(),
