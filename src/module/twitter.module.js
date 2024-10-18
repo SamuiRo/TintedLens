@@ -34,7 +34,9 @@ async function load_page(page, profile) {
         await page.bringToFront()
 
         await page.goto(profile.url)
-        await page.waitForLoadState('networkidle')
+
+        await sleep(10000)
+        // await page.waitForLoadState('networkidle')
 
         const user_feed = await get_user_feed(page)
 
@@ -83,8 +85,20 @@ async function get_user_feed(page) {
         posts: []
     }
     try {
-        await page.waitForSelector(TWITTER_USER_FEED)
-        const feed_container = await page.$(TWITTER_USER_FEED)
+        const e1 = await page.$(TWITTER_USER_FEED)
+        if (e1) console.log("e1 true")
+
+        const e2 = await e1.$('div[aria-label][class="css-175oi2r"]')
+
+        if (e2) console.log("e2 true")
+
+        const e3 = await e2.$('div')
+
+        if (e3) console.log("e3 true")
+
+        // await page.waitForSelector(TWITTER_USER_FEED)
+        // const feed_container = await page.$(TWITTER_USER_FEED)
+        const feed_container = e3
 
         const user_posts = await feed_container.$$(TWITTER_USER_POSTS_CONTAINER)
 
