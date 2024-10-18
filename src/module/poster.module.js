@@ -16,7 +16,7 @@ async function launch() {
                 if (!random_post.details.hey_posted_date) await post_to_hey(random_post)
                 if (!random_post.details.town_posted_date) await post_to_towns(random_post)
             }
-            console.log("isPostingTme", isPostingTme)
+            console.log("isPostingTme", isPostingTime)
             await sleep(1000000)
         }
     } catch (error) {
